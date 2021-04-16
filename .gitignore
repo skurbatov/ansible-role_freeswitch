@@ -1,0 +1,18 @@
+# temp files
+.swp
+
+# other
+*.log
+*.retry
+*.vmdk
+.vscode
+.DS_Store
+.private
+.prv
+.retry
+.vagrant
+.vault
+.vagrant/
+tests/roles/*
+tests/inventory
+!tests/roles/freeswitch

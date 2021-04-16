@@ -1,0 +1,26 @@
+<include>
+  <user id="{{ item.phone }}">
+    <params>
+    {% if item.password is defined %}
+      <param name="password" value="{{ item.password }}"/>
+    {% else %}
+      <param name="password" value="$${default_password}"/>
+    {% endif %}
+      <param name="vm-password" value="{{ item.phone }}"/>
+    </params>
+    <variables>
+      <variable name="toll_allow" value="domestic,international,local"/>
+      <variable name="accountcode" value="{{ item.phone }}"/>
+      <variable name="user_context" value="default"/>
+      {% if item.name is defined %}
+      <variable name="effective_caller_id_name" value="{{ item.name }}"/>
+      {% else %}
+      <variable name="effective_caller_id_name" value="Extension {{ item.phone }}"/>
+      {% endif %}
+      <variable name="effective_caller_id_number" value="{{ item.phone }}"/>
+      <variable name="outbound_caller_id_name" value="$${outbound_caller_name}"/>
+      <variable name="outbound_caller_id_number" value="$${outbound_caller_id}"/>
+      <variable name="callgroup" value="techsupport"/>
+    </variables>
+  </user>
+</include>

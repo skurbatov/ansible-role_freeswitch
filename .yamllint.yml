@@ -1,0 +1,16 @@
+---
+ignore: |
+  /tests/roles/
+  /tests/goss.yml
+
+yaml-files:
+    - '*.yaml'
+    - '*.yml'
+    - '.yamllint'
+
+extends: default
+
+rules:
+    line-length:
+        max: 150
+        level: warning

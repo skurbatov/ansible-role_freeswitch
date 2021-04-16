@@ -1,0 +1,9 @@
+---
+# handlers file for freeswitch-role
+- name: compose down-up
+  shell: |
+      /usr/bin/docker-compose down
+      /usr/bin/docker-compose up -d
+  args:
+      chdir: "{{ freeswitch_service_dir }}"
+      executable: /bin/bash

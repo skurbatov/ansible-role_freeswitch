@@ -1,0 +1,64 @@
+---
+# tasks file for freeswitch-role
+- name: docker | install docker packages
+  include: docker.yml
+
+- name: freeswitch | creating folders
+  file:
+    path: "{{ item.value }}"
+    state: directory
+  loop: "{{ lookup('dict', freeswitch_dirs) }}"
+
+- name: freeswitch | creating directory_default dir
+  file:
+    path: "{{ freeswitch_dirs['configstorage'] }}/directory_default"
+    state: directory
+
+- name: freeswitch | docker-compose config
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ freeswitch_service_dir }}/docker-compose.yml"
+  vars:
+    begin: "{{ sip_user_groups['begin'] }}"
+    end: "{{ sip_user_groups['end'] }}"
+  notify: compose down-up
+
+
+# Change port freeswitch configurations
+- name: freeswitch | creating rtp port config
+  template:
+    src: switch.conf.xml.j2
+    dest: "{{ freeswitch_dirs['configstorage'] }}/switch.conf.xml"
+
+# Add new users or user groups
+- name: freeswitch | creating default dialplan with user groups
+  template:
+    src: dialplan_default.xml.j2
+    dest: "{{ freeswitch_dirs['configstorage'] }}/dialplan_default.xml"
+  notify: compose down-up
+  when: sip_user_groups is defined
+
+- name: freeswitch | change freeswitch language
+  template:
+    src: vars.xml.j2
+    dest: "{{ freeswitch_dirs['configstorage'] }}/vars.xml"
+  notify: compose down-up
+  when: freeswitch_language is defined
+
+- name: freeswitch | generating users profiles
+  vars:
+    users: "{{ item }}"
+  template:
+    src: users.xml.j2
+    dest: "{{ freeswitch_dirs['configstorage'] }}/directory_default/{{ item }}.xml"
+  with_sequence: start="{{ sip_user_groups['begin'] }}" end="{{ sip_user_groups['end'] }}"
+  notify: compose down-up
+  when: sip_user_groups is defined
+
+- name: freeswitch | add single users profiles
+  template:
+    src: user.xml.j2
+    dest: "{{ freeswitch_dirs['configstorage'] }}/directory_default/{{ item.phone }}.xml"
+  with_items: "{{ sip_users }}"
+  notify: compose down-up
+  when: sip_users is defined

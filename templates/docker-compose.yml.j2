@@ -1,0 +1,27 @@
+#jinja2: lstrip_blocks: True
+version: '2'
+
+services:
+ freeswitch:
+  image: {{ freeswitch_image }}
+  hostname: {{ freeswitch_container_name }}
+  container_name: {{ freeswitch_container_name }}
+  network_mode: host
+  restart: always
+  volumes:
+   - /etc/localtime:/etc/localtime:ro
+   - {{ freeswitch_dirs['configstorage'] }}/dialplan_default.xml:/etc/freeswitch/dialplan/default.xml
+   - {{ freeswitch_dirs['configstorage'] }}/switch.conf.xml:/etc/freeswitch/autoload_configs/switch.conf.xml
+   {% if freeswitch_language is defined %}
+   - {{ freeswitch_dirs['configstorage'] }}/vars.xml:/etc/freeswitch/vars.xml
+   {% endif %}
+   {% if sip_user_groups is defined %}
+   {% for item in range(begin|int, end|int) %}
+   - {{ freeswitch_dirs['configstorage'] }}/directory_default/{{ item }}.xml:/etc/freeswitch/directory/default/{{ item }}.xml
+   {% endfor %}
+   {% endif %}
+   {% if sip_users is defined %}
+   {% for item in sip_users %}
+   - {{ freeswitch_dirs['configstorage'] }}/directory_default/{{ item.phone }}.xml:/etc/freeswitch/directory/default/{{ item.phone }}.xml
+   {% endfor %}
+   {% endif %}

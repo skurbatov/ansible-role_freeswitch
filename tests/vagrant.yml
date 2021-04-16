@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - role: freeswitch
+      vars:
+        freeswitch_language: ru
+        sip_users:
+          - name: testuser-1
+            phone: 1000
+            password: 1234
+          - name: testuser-2
+            phone: 1001
+            password: 1234
+          - name: testuser-3
+            phone: 1002
+            password: 1234
+          - name: testuser-4
+            phone: 1003
+            password: 1234
+          - name: testuser-5
+            phone: 1004
+            password: 1234
+          - name: testuser-6
+            phone: 1005
+            password: 1234
+          - name: testuser-7
+            phone: 1006
+            password: 1234
+          - name: testuser-8
+            phone: 1007
+            password: 1234
+          - name: testuser-9
+            phone: 1008
+            password: 1234
+          - name: testuser-10
+            phone: 1009
+            password: 1234
+          - name: testuser-11
+            phone: 1010

@@ -1,0 +1,45 @@
+---
+# defaults file for freeswitch-role
+freeswitch_image_ver: jessie
+freeswitch_image: "sfrost1988/freeswitch:{{ freeswitch_image_ver }}"
+freeswitch_container_name: fswitch
+freeswitch_service_dir: /srv/freeswitch
+freeswitch_dirs:
+  certs: "{{ freeswitch_service_dir }}/certs"
+  configstorage: "{{ freeswitch_service_dir }}/config"
+  data: "{{ freeswitch_service_dir }}/data"
+
+freeswitch_default_ports:
+  rtp_start_port: 64535
+  rtp_end_port: 65535
+
+sip_users:
+  - name: XXX
+    phone: 7009
+    password: 1234
+
+sip_user_groups:
+  begin: 7200
+  end: 7299
+
+sip_conf_room:
+  narrowband:
+    - name: nb_conferences
+      begin: 3000
+      end: 3005
+  wideband:
+    - name: wb_conferences
+      begin: 3100
+      end: 3105
+  ultrawideband:
+    - name: uwb_conferences
+      begin: 3200
+      end: 3205
+  mono_cd_quility:
+    - name: cdquality_conferences
+      begin: 3300
+      end: 3305
+  stereo_cd_quility:
+    - name: cdquality_stereo_conferences
+      begin: 3500
+      end: 3505
